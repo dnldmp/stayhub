@@ -1,22 +1,31 @@
-import { Button } from "@/components/atoms/Button";
+import { UserOutlined } from "@ant-design/icons";
 import { Header } from "@/components/molecules/Header";
+import { ResarvationCard } from "@/components/molecules/ReservationCard";
 import { GetServerSideProps } from "next";
+import { ImageGrid } from "@/components/molecules/ImageGrid";
 
 interface BookingProps {
-  id: string;
+  id: number;
 }
 
 export default function Booking({ id }: BookingProps) {
   return (
     <div>
       <Header />
-      <Button text="Reserve" />
+      <ResarvationCard homeId={id} />
     </div>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const id = params?.id || "";
+  const numericId: number = Number(id);
+
+  if (isNaN(numericId)) {
+    return {
+      notFound: true,
+    };
+  }
 
   if (!id) {
     return {

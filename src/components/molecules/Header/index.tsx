@@ -1,4 +1,6 @@
+import { UserOutlined } from "@ant-design/icons";
 import { SearchBox } from "@/components/atoms/SearchBox";
+import { Avatar } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -22,7 +24,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="border-b border-b-gray-400 w-full flex-1">
+    <header className="border-b border-b-gray-300 w-full flex-1">
       <div className="max-w-screen-xl mx-auto w-full flex flex-row p-2 md:p-4 justify-between items-center">
         <Image
           src={isMobile ? "/m-logo.png" : "/logo.png"}
@@ -35,7 +37,9 @@ export function Header() {
         <div className="flex justify-center w-full mx-1">
           <SearchBox />
         </div>
-        <div className="mx-1">danilo</div>
+        <div className="cursor-pointer">
+          <Avatar size="large" icon={<UserOutlined />} />
+        </div>
       </div>
     </header>
   );

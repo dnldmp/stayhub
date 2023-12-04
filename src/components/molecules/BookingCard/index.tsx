@@ -20,10 +20,6 @@ export function BookingCard({ id, title, distance, image }: BookingCardProps) {
       <BookingCardImage imageLocation={image} />
       <div className="flex flex-row justify-between">
         <h4 className="font-medium text-sm">{title}</h4>
-        <div className="flex text-sm">
-          {/* <OptimizedImage src="/star.png" width="16px" /> */}
-          5.0
-        </div>
       </div>
       <p className="font-light text-sm text-gray-500">{distance}</p>
     </div>

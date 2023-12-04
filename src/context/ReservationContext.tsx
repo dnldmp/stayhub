@@ -1,3 +1,4 @@
+import moment from "moment";
 import { createContext, useContext, useState } from "react";
 
 interface ReservationContextProps {
@@ -9,10 +10,11 @@ interface ReservationContextData {
   updateBooking: (id: number, data: Booking) => void;
   deleteBooking: (id: number) => void;
   bookings: Booking[];
+  getReservedDatesByHomeId: (homeId: number) => string[];
 }
 
 export type Booking = {
-  id: number;
+  id?: number;
   homeId: number;
   startDate: string;
   endDate: string;
@@ -27,6 +29,7 @@ export const ResarvationContextProvider = ({
   const [bookings, setBookings] = useState<Booking[]>([]);
 
   const createBooking = (newBooking: Booking) => {
+    newBooking.id = bookings.length + 1;
     setBookings([...bookings, newBooking]);
   };
 
@@ -44,6 +47,29 @@ export const ResarvationContextProvider = ({
     setBookings(filteredBookings);
   };
 
+  const getReservedDatesByHomeId = (homeId: number): string[] => {
+    const filteredBookings = bookings.filter(
+      (booking) => booking.homeId === homeId
+    );
+
+    const reservedDates: string[] = [];
+
+    filteredBookings.forEach((booking) => {
+      const bookingStart = moment(booking.startDate);
+      const bookingEnd = moment(booking.endDate);
+
+      let currentDate = moment(bookingStart);
+      const lastDate = moment(bookingEnd).add(1, "day"); // Incremento por um dia para incluir a data final
+
+      while (currentDate.isBefore(lastDate, "day")) {
+        reservedDates.push(currentDate.format("YYYY-MM-DD"));
+        currentDate = currentDate.clone().add(1, "day");
+      }
+    });
+
+    return reservedDates;
+  };
+
   return (
     <ReservationContext.Provider
       value={{
@@ -51,6 +77,7 @@ export const ResarvationContextProvider = ({
         updateBooking,
         deleteBooking,
         bookings,
+        getReservedDatesByHomeId,
       }}
       {...rest}
     >
