@@ -55,7 +55,10 @@ export function ReservationCard({ homeId }: ReservationCardProps) {
   }
 
   return (
-    <div className="p-8 rounded-lg border border-gray-300 sm:max-w-sm w-full max-h-64 shadow-xl">
+    <div
+      data-testid="ReservationCard"
+      className="p-8 rounded-lg border border-gray-300 sm:max-w-sm w-full max-h-64 shadow-xl"
+    >
       <h3 className="text-lg font-semibold">
         Please select your check-in and checkout date
       </h3>
