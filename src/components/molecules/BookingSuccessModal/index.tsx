@@ -16,6 +16,7 @@ export function BookingSuccessModal({
 
   return (
     <Modal
+      data-testid="BookingSuccessModal"
       title="Reservervation created with success"
       onCancel={onCancel}
       open={open}

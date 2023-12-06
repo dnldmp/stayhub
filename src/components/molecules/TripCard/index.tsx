@@ -43,7 +43,10 @@ export function TripCard({ homeId, dateRange, bookingId }: TripCardProps) {
 
   return (
     <>
-      <div className="flex flex-row w-full md:w-1/2 xl:w-1/3 px-3 mb-7 flex-nowrap">
+      <div
+        data-testid="TripCard"
+        className="flex flex-row w-full md:w-1/2 xl:w-1/3 px-3 mb-7 flex-nowrap"
+      >
         <div className="w-24">
           <BookingCardImage imageLocation={place.image} />
         </div>
