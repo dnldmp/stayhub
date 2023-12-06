@@ -10,9 +10,8 @@ export function BookingCardImage({ imageLocation }: BookingCardImageProps) {
       <Image
         src={imageLocation}
         alt="home-image"
-        layout="fill"
-        objectFit="cover"
-        className="absolute inset-0 rounded-xl"
+        fill
+        className="absolute inset-0 rounded-xl object-cover"
       />
     </div>
   );

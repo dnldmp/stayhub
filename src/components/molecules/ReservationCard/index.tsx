@@ -1,21 +1,31 @@
 import { Button } from "@/components/atoms/Button";
 import { useReservation } from "@/context/ReservationContext";
-import { DatePicker } from "antd";
 import { useState } from "react";
-import moment from "moment";
+import { toast } from "react-toastify";
+import { DateRange } from "./styles";
+import { BookingSuccessModal } from "../BookingSuccessModal";
 
 interface ReservationCardProps {
   homeId: number;
 }
 
-export function ResarvationCard({ homeId }: ReservationCardProps) {
+export function ReservationCard({ homeId }: ReservationCardProps) {
   const [dateRange, setDateRange] = useState<string[]>([]);
-  const { RangePicker } = DatePicker;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { createBooking, getReservedDatesByHomeId } = useReservation();
 
   const handleOnClick = () => {
     const [startDate, endDate] = dateRange;
-    createBooking({ homeId, startDate, endDate });
+
+    createBooking({
+      homeId,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+    });
+
+    toast.success("Reservation created successfully");
+    setIsModalOpen(true);
   };
 
   function disabledDate(current: any) {
@@ -30,11 +40,11 @@ export function ResarvationCard({ homeId }: ReservationCardProps) {
   }
 
   return (
-    <div className="p-8 rounded-lg border border-gray-300 max-w-sm shadow-xl">
-      <h3 className="text-lg font-bold">
+    <div className="p-8 rounded-lg border border-gray-300 sm:max-w-sm w-full max-h-64 shadow-xl">
+      <h3 className="text-lg font-semibold">
         Please select your check-in and checkout date
       </h3>
-      <RangePicker
+      <DateRange
         disabledDate={disabledDate}
         className="w-full p-3 my-4"
         placeholder={["Check-in", "Checkout"]}
@@ -44,6 +54,10 @@ export function ResarvationCard({ homeId }: ReservationCardProps) {
         }}
       />
       <Button text="Reserve" onClick={handleOnClick} />
+      <BookingSuccessModal
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { UserOutlined } from "@ant-design/icons";
 import { SearchBox } from "@/components/atoms/SearchBox";
-import { Avatar } from "antd";
+import { Avatar, Dropdown } from "antd";
+import type { MenuProps } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -9,6 +10,17 @@ export function Header() {
   const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
   const logoSize = isMobile ? 80 : 150;
+
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: (
+        <p className="font-bold" onClick={() => router.push("/reservations")}>
+          Trips
+        </p>
+      ),
+    },
+  ];
 
   useEffect(() => {
     const checkWindowSize = () => {
@@ -37,9 +49,11 @@ export function Header() {
         <div className="flex justify-center w-full mx-1">
           <SearchBox />
         </div>
-        <div className="cursor-pointer">
-          <Avatar size="large" icon={<UserOutlined />} />
-        </div>
+        <Dropdown menu={{ items }} placement="bottom">
+          <div className="cursor-pointer">
+            <Avatar size="large" icon={<UserOutlined />} />
+          </div>
+        </Dropdown>
       </div>
     </header>
   );

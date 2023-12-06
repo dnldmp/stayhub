@@ -1,11 +1,11 @@
 import { BookingCard } from "@/components/molecules/BookingCard";
-import { bookingList } from "@/mocks/bookingList";
+import { placesList } from "@/mocks/placesList";
 
 export function BookingListCards() {
   return (
     <div className="w-full flex flex-wrap my-3 max-w-screen-xl mx-auto">
-      {bookingList.map((book) => (
-        <BookingCard key={`booking-${book.id}`} {...book} />
+      {placesList.map((place) => (
+        <BookingCard key={`booking-${place.id}`} {...place} />
       ))}
     </div>
   );

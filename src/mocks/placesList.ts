@@ -1,4 +1,4 @@
-export const bookingList = [
+export const placesList = [
   {
     id: 1,
     title: "São Bento do Sul, Brazil",

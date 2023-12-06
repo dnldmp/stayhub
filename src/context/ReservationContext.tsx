@@ -1,3 +1,4 @@
+import { placesList } from "@/mocks/placesList";
 import moment from "moment";
 import { createContext, useContext, useState } from "react";
 
@@ -10,14 +11,22 @@ interface ReservationContextData {
   updateBooking: (id: number, data: Booking) => void;
   deleteBooking: (id: number) => void;
   bookings: Booking[];
+  getPlaceById: (homeId: number) => Places | undefined;
   getReservedDatesByHomeId: (homeId: number) => string[];
 }
 
+export type Places = {
+  id: number;
+  title: string;
+  distance: string;
+  image: string;
+};
+
 export type Booking = {
   id?: number;
-  homeId: number;
-  startDate: string;
-  endDate: string;
+  homeId?: number;
+  startDate: Date;
+  endDate: Date;
 };
 
 const ReservationContext = createContext({} as ReservationContextData);
@@ -45,6 +54,10 @@ export const ResarvationContextProvider = ({
       (booking) => booking.id !== bookingId
     );
     setBookings(filteredBookings);
+  };
+
+  const getPlaceById = (homeId: number) => {
+    return placesList.find((place) => place.id === Number(homeId));
   };
 
   const getReservedDatesByHomeId = (homeId: number): string[] => {
@@ -77,6 +90,7 @@ export const ResarvationContextProvider = ({
         updateBooking,
         deleteBooking,
         bookings,
+        getPlaceById,
         getReservedDatesByHomeId,
       }}
       {...rest}
