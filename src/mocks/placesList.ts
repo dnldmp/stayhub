@@ -27,12 +27,24 @@ export const placesList = [
     id: 5,
     title: "London, UK",
     distance: "10 kilometers away",
-    image: "/homes/01.jpg",
+    image: "/homes/05.jpg",
   },
   {
     id: 6,
     title: "Rome, Italy",
     distance: "18 kilometers away",
-    image: "/homes/02.jpg",
+    image: "/homes/06.jpg",
+  },
+  {
+    id: 7,
+    title: "São Paulo, Brazil",
+    distance: "50 kilometers away",
+    image: "/homes/07.jpg",
+  },
+  {
+    id: 8,
+    title: "Berlin, Germany",
+    distance: "300 kilometers away",
+    image: "/homes/08.jpg",
   },
 ];

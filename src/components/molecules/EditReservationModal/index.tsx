@@ -4,6 +4,7 @@ import { useReservation } from "@/context/ReservationContext";
 import { Button } from "@/components/atoms/Button";
 import { toast } from "react-toastify";
 import { StyleWrapperDatePicker } from "./styles";
+import moment from "moment";
 
 interface EditReservationModalProps {
   bookingId: number;
@@ -32,9 +33,8 @@ export function EditReservationModal({
   function disabledDate(current: any) {
     return (
       current &&
-      disabledDates.some((date) => {
-        return current.isSame(date, "day");
-      })
+      (current < moment().startOf("day") ||
+        disabledDates.some((date) => current.isSame(date, "day")))
     );
   }
 
