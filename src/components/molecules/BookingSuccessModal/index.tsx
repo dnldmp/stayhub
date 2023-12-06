@@ -1,7 +1,6 @@
 import { Button } from "@/components/atoms/Button";
 import { Modal } from "antd";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 interface BookingSuccessModalProps {
   open: boolean;
