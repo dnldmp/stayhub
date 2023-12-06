@@ -4,7 +4,7 @@ import { BookingListCards } from "@/components/organisms/BookingListCards";
 export default function Home() {
   return (
     <main>
-      <Header />
+      <Header isSearchVisible />
       <BookingListCards />
     </main>
   );

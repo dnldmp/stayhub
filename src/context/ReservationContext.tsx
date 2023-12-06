@@ -13,6 +13,9 @@ interface ReservationContextData {
   bookings: Booking[];
   getPlaceById: (homeId: number) => Places | undefined;
   getReservedDatesByHomeId: (homeId: number) => string[];
+  searchedPlaces: Places[];
+  filterPlaces: (search: string) => void;
+  getRangeOfDates: (startDate: Date, endDate: Date) => string[];
 }
 
 export type Places = {
@@ -36,6 +39,7 @@ export const ResarvationContextProvider = ({
   ...rest
 }: ReservationContextProps) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [searchedPlaces, setSearchedPlaces] = useState<Places[]>(placesList);
 
   const createBooking = (newBooking: Booking) => {
     newBooking.id = bookings.length + 1;
@@ -60,27 +64,48 @@ export const ResarvationContextProvider = ({
     return placesList.find((place) => place.id === Number(homeId));
   };
 
+  const getDatesInRange = (startDate: Date, endDate: Date): string[] => {
+    const dates: string[] = [];
+
+    let currentDate = moment(startDate);
+    const lastDate = moment(endDate).add(1, "day");
+
+    while (currentDate.isBefore(lastDate, "day")) {
+      dates.push(currentDate.format("YYYY-MM-DD"));
+      currentDate = currentDate.clone().add(1, "day");
+    }
+
+    return dates;
+  };
+
+  const getRangeOfDates = (startDate: Date, endDate: Date): string[] => {
+    const rangeOfDates: string[] = getDatesInRange(startDate, endDate);
+    return rangeOfDates;
+  };
+
   const getReservedDatesByHomeId = (homeId: number): string[] => {
     const filteredBookings = bookings.filter(
       (booking) => booking.homeId === homeId
     );
-
     const reservedDates: string[] = [];
 
     filteredBookings.forEach((booking) => {
-      const bookingStart = moment(booking.startDate);
-      const bookingEnd = moment(booking.endDate);
-
-      let currentDate = moment(bookingStart);
-      const lastDate = moment(bookingEnd).add(1, "day"); // Incremento por um dia para incluir a data final
-
-      while (currentDate.isBefore(lastDate, "day")) {
-        reservedDates.push(currentDate.format("YYYY-MM-DD"));
-        currentDate = currentDate.clone().add(1, "day");
-      }
+      const datesInRange = getDatesInRange(booking.startDate, booking.endDate);
+      reservedDates.push(...datesInRange);
     });
 
     return reservedDates;
+  };
+
+  const filterPlaces = (search: string) => {
+    if (!search) return setSearchedPlaces(placesList);
+
+    const filteredPlaces = placesList.filter(
+      (place) =>
+        place.title.toLowerCase().includes(search.toLowerCase()) ||
+        place.distance.toLowerCase().includes(search.toLowerCase())
+    );
+    setSearchedPlaces(filteredPlaces);
   };
 
   return (
@@ -92,6 +117,9 @@ export const ResarvationContextProvider = ({
         bookings,
         getPlaceById,
         getReservedDatesByHomeId,
+        filterPlaces,
+        searchedPlaces,
+        getRangeOfDates,
       }}
       {...rest}
     >

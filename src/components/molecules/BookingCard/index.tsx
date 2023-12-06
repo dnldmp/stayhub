@@ -1,5 +1,4 @@
 import { BookingCardImage } from "@/components/atoms/BookingCardImage";
-import { OptimizedImage } from "@/components/atoms/OptimizedImage";
 import { useRouter } from "next/router";
 
 interface BookingCardProps {
@@ -14,7 +13,7 @@ export function BookingCard({ id, title, distance, image }: BookingCardProps) {
 
   return (
     <div
-      className="flex flex-col w-full md:w-1/2 lg:w-1/3 xl:w-1/4 cursor-pointer px-3 mb-5"
+      className="flex flex-col w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 cursor-pointer px-3 mb-5"
       onClick={() => router.push(`/booking/${id}`)}
     >
       <BookingCardImage imageLocation={image} />

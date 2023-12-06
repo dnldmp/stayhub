@@ -6,10 +6,14 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-export function Header() {
+interface HeaderProps {
+  isSearchVisible?: boolean;
+}
+
+export function Header({ isSearchVisible }: HeaderProps) {
   const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
-  const logoSize = isMobile ? 80 : 150;
+  const logoSize = isMobile ? 55 : 150;
 
   const items: MenuProps["items"] = [
     {
@@ -46,12 +50,15 @@ export function Header() {
           className="mx-1 cursor-pointer"
           onClick={() => router.push("/")}
         />
-        <div className="flex justify-center w-full mx-1">
-          <SearchBox />
-        </div>
+        {isSearchVisible && (
+          <div className="flex justify-center w-full mx-3">
+            <SearchBox />
+          </div>
+        )}
+
         <Dropdown menu={{ items }} placement="bottom">
           <div className="cursor-pointer">
-            <Avatar size="large" icon={<UserOutlined />} />
+            <Avatar size={50} src="/user.jpg" icon={<UserOutlined />} />
           </div>
         </Dropdown>
       </div>

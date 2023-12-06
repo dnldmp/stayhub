@@ -6,7 +6,7 @@ export const StyleWrapperDatePicker = styled.div`
       width: 0;
       .ant-picker-header {
         position: absolute;
-        right: 20px;
+        right: 0;
         .ant-picker-header-prev-btn,
         .ant-picker-header-view {
           visibility: hidden;

@@ -2,8 +2,9 @@ import { Button } from "@/components/atoms/Button";
 import { useReservation } from "@/context/ReservationContext";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { DateRange } from "./styles";
+import { StyleWrapperDatePicker } from "./styles";
 import { BookingSuccessModal } from "../BookingSuccessModal";
+import { DatePicker } from "antd";
 
 interface ReservationCardProps {
   homeId: number;
@@ -12,25 +13,39 @@ interface ReservationCardProps {
 export function ReservationCard({ homeId }: ReservationCardProps) {
   const [dateRange, setDateRange] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const DateRange = DatePicker.RangePicker;
 
-  const { createBooking, getReservedDatesByHomeId } = useReservation();
+  const { createBooking, getReservedDatesByHomeId, getRangeOfDates } =
+    useReservation();
+
+  const disabledDates = getReservedDatesByHomeId(homeId);
 
   const handleOnClick = () => {
-    const [startDate, endDate] = dateRange;
+    const [startDateString, endDateString] = dateRange;
 
-    createBooking({
-      homeId,
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
-    });
+    const startDate = new Date(`${startDateString} EDT`);
+    const endDate = new Date(`${endDateString} EDT`);
+
+    const rangeOfDates: string[] = getRangeOfDates(startDate, endDate);
+    const isDateReserved = rangeOfDates.some((date) =>
+      disabledDates.includes(date)
+    );
+
+    if (isDateReserved) {
+      return toast.error("This date is already reserved");
+    }
+
+    createBooking({ homeId, startDate, endDate });
 
     toast.success("Reservation created successfully");
     setIsModalOpen(true);
   };
 
-  function disabledDate(current: any) {
-    const disabledDates = getReservedDatesByHomeId(homeId);
+  const panelRender = (panelNode: any) => (
+    <StyleWrapperDatePicker>{panelNode}</StyleWrapperDatePicker>
+  );
 
+  function disabledDate(current: any) {
     return (
       current &&
       disabledDates.some((date) => {
@@ -45,6 +60,7 @@ export function ReservationCard({ homeId }: ReservationCardProps) {
         Please select your check-in and checkout date
       </h3>
       <DateRange
+        panelRender={panelRender}
         disabledDate={disabledDate}
         className="w-full p-3 my-4"
         placeholder={["Check-in", "Checkout"]}
