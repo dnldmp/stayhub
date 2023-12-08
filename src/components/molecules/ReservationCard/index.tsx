@@ -23,9 +23,12 @@ export function ReservationCard({ homeId }: ReservationCardProps) {
 
   const handleOnClick = () => {
     const [startDateString, endDateString] = dateRange;
-
     const startDate = new Date(`${startDateString} EDT`);
     const endDate = new Date(`${endDateString} EDT`);
+
+    if (startDate.getTime() === endDate.getTime()) {
+      return toast.error("Check-in and checkout date cannot be the same");
+    }
 
     const rangeOfDates: string[] = getRangeOfDates(startDate, endDate);
     const isDateReserved = rangeOfDates.some((date) =>
