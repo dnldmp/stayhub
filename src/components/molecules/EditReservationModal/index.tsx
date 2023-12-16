@@ -1,21 +1,19 @@
 import { DatePicker, Modal } from "antd";
 import { useState } from "react";
-import { useReservation } from "@/context/ReservationContext";
+import { Booking, useReservation } from "@/context/ReservationContext";
 import { Button } from "@/components/atoms/Button";
 import { toast } from "react-toastify";
 import { StyleWrapperDatePicker } from "./styles";
-import moment from "moment";
+import dayjs from "dayjs";
 
 interface EditReservationModalProps {
   bookingId: number;
-  homeId: number;
   open: boolean;
   onCancel: () => void;
 }
 
 export function EditReservationModal({
   bookingId,
-  homeId,
   open,
   onCancel,
 }: EditReservationModalProps) {
@@ -26,15 +24,27 @@ export function EditReservationModal({
     <StyleWrapperDatePicker>{panelNode}</StyleWrapperDatePicker>
   );
 
-  const { getReservedDatesByHomeId, updateBooking, getRangeOfDates } =
-    useReservation();
-  const disabledDates = getReservedDatesByHomeId(homeId);
+  const {
+    getReservedDatesByHomeId,
+    updateBooking,
+    getRangeOfDates,
+    getReservationById,
+  } = useReservation();
+
+  const bookingInformation = getReservationById(bookingId);
+  if (!bookingInformation) {
+    return null;
+  }
+  const { homeId, startDate, endDate } = bookingInformation;
+  const disabledDates = getReservedDatesByHomeId(homeId!);
+  const bookingDatesRange = getRangeOfDates(startDate, endDate);
 
   function disabledDate(current: any) {
     return (
       current &&
-      (current < moment().startOf("day") ||
-        disabledDates.some((date) => current.isSame(date, "day")))
+      (current < dayjs().startOf("day") ||
+        (disabledDates.some((date) => current.isSame(date, "day")) &&
+          !bookingDatesRange.some((date) => current.isSame(date, "day"))))
     );
   }
 
@@ -48,8 +58,9 @@ export function EditReservationModal({
     }
 
     const rangeOfDates: string[] = getRangeOfDates(startDate, endDate);
-    const isDateReserved = rangeOfDates.some((date) =>
-      disabledDates.includes(date)
+    const isDateReserved = rangeOfDates.some(
+      (date) =>
+        disabledDates.includes(date) && !bookingDatesRange.includes(date)
     );
 
     if (isDateReserved) {
@@ -74,6 +85,7 @@ export function EditReservationModal({
           Please select your new check-in and checkout date
         </h3>
         <DateRange
+          defaultValue={[dayjs(startDate), dayjs(endDate)]}
           panelRender={panelRender}
           disabledDate={disabledDate}
           className="w-full p-3 my-4"

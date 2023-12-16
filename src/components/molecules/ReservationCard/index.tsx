@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { StyleWrapperDatePicker } from "./styles";
 import { BookingSuccessModal } from "../BookingSuccessModal";
 import { DatePicker } from "antd";
-import moment from "moment";
+import dayjs from "dayjs";
 
 interface ReservationCardProps {
   homeId: number;
@@ -52,7 +52,7 @@ export function ReservationCard({ homeId }: ReservationCardProps) {
   function disabledDate(current: any) {
     return (
       current &&
-      (current < moment().startOf("day") ||
+      (current < dayjs().startOf("day") ||
         disabledDates.some((date) => current.isSame(date, "day")))
     );
   }

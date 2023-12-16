@@ -1,13 +1,13 @@
 import { TripCard } from "@/components/molecules/TripCard";
 import { useReservation } from "@/context/ReservationContext";
-import moment from "moment";
+import dayjs from "dayjs";
 
 export function TripListCard() {
   const { bookings } = useReservation();
 
   const formatDateRange = (startDate: Date, endDate: Date): string => {
-    const startFormatted = moment(startDate).format("MMM D");
-    const endFormatted = moment(endDate).format("D, YYYY");
+    const startFormatted = dayjs(startDate).format("MMM D");
+    const endFormatted = dayjs(endDate).format("D, YYYY");
 
     return `${startFormatted}–${endFormatted}`;
   };

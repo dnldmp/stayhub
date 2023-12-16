@@ -1,5 +1,5 @@
 import { placesList } from "@/mocks/placesList";
-import moment from "moment";
+import dayjs from "dayjs";
 import { createContext, useContext, useState } from "react";
 
 interface ReservationContextProps {
@@ -16,6 +16,7 @@ interface ReservationContextData {
   searchedPlaces: Places[];
   filterPlaces: (search: string) => void;
   getRangeOfDates: (startDate: Date, endDate: Date) => string[];
+  getReservationById: (id: number) => Booking | undefined;
 }
 
 export type Places = {
@@ -64,11 +65,15 @@ export const ResarvationContextProvider = ({
     return placesList.find((place) => place.id === Number(homeId));
   };
 
+  const getReservationById = (id: number) => {
+    return bookings.find((place) => place.id === Number(id));
+  };
+
   const getDatesInRange = (startDate: Date, endDate: Date): string[] => {
     const dates: string[] = [];
 
-    let currentDate = moment(startDate);
-    const lastDate = moment(endDate).add(1, "day");
+    let currentDate = dayjs(startDate);
+    const lastDate = dayjs(endDate).add(1, "day");
 
     while (currentDate.isBefore(lastDate, "day")) {
       dates.push(currentDate.format("YYYY-MM-DD"));
@@ -120,6 +125,7 @@ export const ResarvationContextProvider = ({
         filterPlaces,
         searchedPlaces,
         getRangeOfDates,
+        getReservationById,
       }}
       {...rest}
     >

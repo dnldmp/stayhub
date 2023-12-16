@@ -39,7 +39,6 @@ describe("BookingListCards component", () => {
     });
 
     const { getAllByTestId } = render(<BookingListCards />);
-    console.log(getAllByTestId);
     const bookingCards = getAllByTestId("BookingCard");
 
     expect(bookingCards.length).toBe(mockPlaces.length);

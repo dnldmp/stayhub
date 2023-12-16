@@ -73,7 +73,6 @@ export function TripCard({ homeId, dateRange, bookingId }: TripCardProps) {
         bookingId={bookingId}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
-        homeId={homeId}
       />
     </>
   );
